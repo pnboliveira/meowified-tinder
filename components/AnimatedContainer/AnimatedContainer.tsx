@@ -1,4 +1,10 @@
-import { View, StyleSheet, useWindowDimensions } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  useWindowDimensions,
+} from "react-native";
 import { useEffect, useState } from "react";
 import Animated, {
   useSharedValue,
@@ -13,14 +19,24 @@ import {
   Gesture,
   GestureDetector,
 } from "react-native-gesture-handler";
+import HeartIcon from "@/assets/icons/HeartIcon";
+import DeleteIcon from "@/assets/icons/DeleteIcon";
 
 const rotationValue = 60;
 
 interface AnimationProps {
+  data: any;
   renderItem: any;
+  onReset: any;
+  onVote?: any;
 }
 
-const AnimationContainer = ({ renderItem }: AnimationProps) => {
+const AnimationContainer = ({
+  data,
+  renderItem,
+  onReset,
+  onVote,
+}: AnimationProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState(currentIndex + 1);
 
@@ -34,6 +50,14 @@ const AnimationContainer = ({ renderItem }: AnimationProps) => {
       interpolate(translateX.value, [0, tempTranslateX], [0, rotationValue]) +
       "deg"
   );
+  const startValue = 0;
+
+  // reset and re-render cards once limit is reached
+  if (currentIndex === data.length) {
+    runOnJS(setCurrentIndex)(0);
+    runOnJS(setNextIndex)(1);
+    runOnJS(onReset)();
+  }
 
   const cardValue = useAnimatedStyle(() => ({
     transform: [
@@ -45,7 +69,6 @@ const AnimationContainer = ({ renderItem }: AnimationProps) => {
       },
     ],
   }));
-
   const nextCardValue = useAnimatedStyle(() => ({
     transform: [
       {
@@ -61,6 +84,13 @@ const AnimationContainer = ({ renderItem }: AnimationProps) => {
       [-tempTranslateX, 0, tempTranslateX],
       [1, 0.5, 1]
     ),
+  }));
+
+  const likeOpacity = useAnimatedStyle(() => ({
+    opacity: interpolate(translateX.value, [0, tempTranslateX], [0, 2]),
+  }));
+  const dislikeOpacity = useAnimatedStyle(() => ({
+    opacity: interpolate(translateX.value, [0, -tempTranslateX], [0, 2]),
   }));
 
   const pan = Gesture.Pan()
@@ -83,10 +113,19 @@ const AnimationContainer = ({ renderItem }: AnimationProps) => {
         {},
         () => runOnJS(setCurrentIndex)(currentIndex + 1)
       );
+
+      e.velocityX > 0
+        ? runOnJS(onVote)(currentIndex, 1)
+        : runOnJS(onVote)(currentIndex, -1);
     })
     .onFinalize(() => {
       translateX.value = withSpring(0);
     });
+
+  const handleVoting = (index: number, vote: number) => {
+    onVote(index, vote);
+    setCurrentIndex(index + 1);
+  };
 
   useEffect(() => {
     setNextIndex(currentIndex + 1);
@@ -103,11 +142,38 @@ const AnimationContainer = ({ renderItem }: AnimationProps) => {
       <GestureHandlerRootView style={styles.cardContainer}>
         <GestureDetector gesture={pan}>
           <Animated.View style={[styles.animatedStyle, cardValue]}>
+            <Animated.View style={[styles.like, { left: 60 }, likeOpacity]}>
+              <HeartIcon />
+            </Animated.View>
+            <Animated.View
+              style={[styles.like, { left: "80%" }, dislikeOpacity]}
+            >
+              <DeleteIcon />
+            </Animated.View>
             {/* generate cards based on data */}
             {renderItem({ item: currentIndex })}
           </Animated.View>
         </GestureDetector>
       </GestureHandlerRootView>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.buttonVote}
+          onPress={() => handleVoting(currentIndex, -1)}
+        >
+          <Text>
+            <DeleteIcon />
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonVote}
+          onPress={() => handleVoting(currentIndex, 1)}
+        >
+          <Text>
+            <HeartIcon />
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -130,6 +196,38 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  buttonContainer: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    padding: 0,
+    gap: 48,
+    bottom: 40,
+
+    position: "absolute",
+  },
+
+  like: {
+    position: "absolute",
+    top: 200,
+    zIndex: 1,
+    width: 300,
+    height: 300,
+  },
+  buttonVote: {
+    backgroundColor: "white",
+    padding: 16,
+    borderRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.41,
+    shadowRadius: 9.11,
+
+    elevation: 5,
   },
 });
 
