@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import Card from "@/components/Card/Card";
 import fetchAPI from "@/utils/fetchAPI";
+import AnimationContainer from "@/components/AnimatedContainer/AnimatedContainer";
 interface CatData {
   breeds: {
     name: string;
@@ -32,15 +33,19 @@ const Index = () => {
 
   return (
     <View style={styles.container}>
-      {catData && catData[0].breeds.length > 0 && (
-        <Card
-          key={catData[0].id}
-          name={catData[0].breeds[0].name}
-          bio={catData[0].breeds[0].description}
-          image={catData[0].url}
-          adaptability={catData[0].breeds[0].adaptability}
-        />
-      )}
+      <AnimationContainer
+        renderItem={({ item }: { item: number }) =>
+          catData[item] && catData[item].breeds.length > 0 ? (
+            <Card
+              key={catData[item].id}
+              name={catData[item].breeds[0].name}
+              bio={catData[item].breeds[0].description}
+              image={catData[item].url}
+              adaptability={catData[item].breeds[0].adaptability}
+            />
+          ) : undefined
+        }
+      />
     </View>
   );
 };

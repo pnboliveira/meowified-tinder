@@ -9,7 +9,7 @@ const fetchAPI = async (endpoint: string) => {
   }).catch((error) => {
     console.error("There was an error!", error);
   });
-  if (!response.ok) {
+  if (!response || !response.ok) {
     throw new Error("Network response was not ok");
   }
   return response.json();
