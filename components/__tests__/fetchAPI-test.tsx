@@ -4,10 +4,10 @@ describe("fetchAPI", () => {
   const originalFetch = global.fetch;
   const mockEndpoint = "images/search";
   const mockResponse = [{ id: "1", url: "https://example.com/cat.jpg" }];
-  const mockApiKey = process.env.API_KEY;
+  const mockApiKey = process.env.EXPO_PUBLIC_API_KEY;
 
   beforeAll(() => {
-    process.env.API_KEY = mockApiKey;
+    process.env.EXPO_PUBLIC_API_KEY = mockApiKey;
   });
 
   beforeEach(() => {
@@ -34,7 +34,7 @@ describe("fetchAPI", () => {
       `https://api.thecatapi.com/v1/${mockEndpoint}`,
       {
         headers: {
-          "x-api-key": `${mockApiKey}`,
+          "x-api-key": "",
         },
       }
     );

@@ -143,12 +143,12 @@ const AnimationContainer = ({
         <GestureDetector gesture={pan}>
           <Animated.View style={[styles.animatedStyle, cardValue]}>
             <Animated.View style={[styles.like, { left: 60 }, likeOpacity]}>
-              <HeartIcon />
+              <HeartIcon key="like" />
             </Animated.View>
             <Animated.View
               style={[styles.like, { left: "80%" }, dislikeOpacity]}
             >
-              <DeleteIcon />
+              <DeleteIcon key="dislike" />
             </Animated.View>
             {/* generate cards based on data */}
             {renderItem({ item: currentIndex })}
