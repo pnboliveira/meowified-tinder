@@ -4,7 +4,7 @@ export const voteAPI = async (voteData: { catId: any; vote: number }) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-api-key": process.env.API_KEY || "",
+      "x-api-key": process.env.EXPO_PUBLIC_API_KEY || "",
     },
     body: JSON.stringify({ image_id: voteData.catId, value: voteData.vote }),
   });
