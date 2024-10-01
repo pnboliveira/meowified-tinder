@@ -32,14 +32,15 @@ const Index = () => {
 
   return (
     <View style={styles.container}>
-      {catData && catData[0].breeds.length > 0 ? (
-            <Card
-              key={catData[0].id}
-              name={catData[0].breeds[0].name}
-              bio={catData[0].breeds[0].description}
-              image={catData[0].url}
-              adaptability={catData[0].breeds[0].adaptability}
-            />}
+      {catData && catData[0].breeds.length > 0 && (
+        <Card
+          key={catData[0].id}
+          name={catData[0].breeds[0].name}
+          bio={catData[0].breeds[0].description}
+          image={catData[0].url}
+          adaptability={catData[0].breeds[0].adaptability}
+        />
+      )}
     </View>
   );
 };
