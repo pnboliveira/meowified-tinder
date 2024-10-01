@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<View
+  style={
+    {
+      "backgroundColor": "#FFF",
+      "borderRadius": 10,
+      "height": "70%",
+      "width": "95%",
+    }
+  }
+>
+  <View
+    accessibilityIgnoresInvertColors={true}
+    style={
+      {
+        "borderRadius": 10,
+        "height": "100%",
+        "justifyContent": "flex-end",
+        "overflow": "hidden",
+        "width": "100%",
+      }
+    }
+  >
+    <Image
+      source={
+        {
+          "uri": "https://example.com/image.png",
+        }
+      }
+      style={
+        [
+          {
+            "bottom": 0,
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+          },
+          {
+            "height": "100%",
+            "width": "100%",
+          },
+          undefined,
+        ]
+      }
+    />
+    <View
+      style={
+        {
+          "alignSelf": "center",
+          "backgroundColor": "#FFF",
+          "borderRadius": 16,
+          "gap": 2,
+          "height": 60,
+          "justifyContent": "space-evenly",
+          "paddingLeft": 16,
+          "paddingTop": 8,
+          "top": 8,
+          "width": 350,
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "fontSize": 16,
+            "fontWeight": "bold",
+            "lineHeight": 20,
+          }
+        }
+      >
+        John Doe
+      </Text>
+      <Text>
+        Adaptability: 
+        7
+      </Text>
+      <Text
+        style={
+          {
+            "fontSize": 8,
+            "lineHeight": 10,
+          }
+        }
+      >
+        I am a bio
+      </Text>
+    </View>
+  </View>
+</View>
+`;
